@@ -123,3 +123,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Animated underline utility for links */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  transition: background-size 0.22s ease, color 0.12s ease;
+  text-decoration: none;
+}
+.link-underline:hover,
+.link-underline:focus {
+  background-size: 100% 2px;
+}
+
