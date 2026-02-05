@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import clsx from "clsx";
 
 interface NumberFieldProps {
   id?: string;
@@ -10,19 +11,24 @@ interface NumberFieldProps {
   max?: number;
   step?: number | string;
   disabled?: boolean;
+  className?: string;
 }
 
-export default function NumberField({
+export function NumberField({
   id,
   label,
   value,
   onChange,
-  min,
+  min = 0,
   max,
   step = 1,
   disabled = false,
+  className,
 }: NumberFieldProps) {
-  const valueStr = value !== undefined && !Number.isNaN(value) ? String(value) : "";
+  const valueStr =
+    value !== undefined && !Number.isNaN(value) ? String(value) : "";
+
+  const hasValue = valueStr !== "";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
@@ -37,7 +43,7 @@ export default function NumberField({
   const inputId = id ?? label.toLowerCase().replace(/\s+/g, "-");
 
   return (
-    <div className="w-full">
+    <div className={clsx("w-full", className)}>
       <div className="relative">
         <input
           id={inputId}
@@ -50,11 +56,15 @@ export default function NumberField({
           step={step}
           disabled={disabled}
           placeholder=" "
-          className="peer w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:opacity-50"
+          className="mb-5 peer w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:opacity-50"
         />
         <label
           htmlFor={inputId}
-          className="absolute left-3 top-1/2 z-10 -translate-y-1/2 cursor-text text-sm text-gray-500 transition-all peer-focus:-top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-indigo-600 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2"
+          className={`absolute left-3 z-10 cursor-text transition-all peer-focus:-top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-indigo-600 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 ${
+            hasValue
+              ? "-top-2 translate-y-0 bg-white text-xs px-1"
+              : "top-1/2 -translate-y-1/2 text-sm text-gray-500"
+          }`}
         >
           {label}
         </label>

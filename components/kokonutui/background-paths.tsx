@@ -76,10 +76,23 @@ function generateAestheticPath(
     const cp1y = prevPoint.y;
     const cp2x = prevPoint.x + (point.x - prevPoint.x) * (1 - tension);
     const cp2y = point.y;
-    return `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${point.x} ${point.y}`;
+    // Format numbers to fixed precision to avoid SSR/CSR floating point mismatches
+    const fmt = (n: number) => n.toFixed(3);
+    return `C ${fmt(cp1x)} ${fmt(cp1y)}, ${fmt(cp2x)} ${fmt(cp2y)}, ${fmt(
+      point.x,
+    )} ${fmt(point.y)}`;
   });
 
-  return pathCommands.join(" ");
+  // Also format the initial move command consistently
+  const formatted = pathCommands.map((cmd) =>
+    cmd.replace(/(-?\d+\.?\d*)/g, (m) => {
+      // Ensure numbers in the 'M' command are formatted too
+      const num = Number(m);
+      return Number.isNaN(num) ? m : num.toFixed(3);
+    }),
+  );
+
+  return formatted.join(" ");
 }
 
 // Deterministic id generator to avoid SSR/CSR mismatches

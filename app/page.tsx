@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import BackgroundPaths from "../components/kokonutui/background-paths";
 
