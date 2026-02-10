@@ -57,7 +57,7 @@ const Card: React.FC<CardProps> = ({
   secondaryAction,
 }) => {
   return (
-    <article className="max-w-xl w-full bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden">
+    <article className="w-full bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden">
       {image ? (
         <div className="w-full h-48 overflow-hidden bg-gray-100">
           <Image

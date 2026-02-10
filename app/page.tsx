@@ -41,7 +41,7 @@ export default function FormulasIndex() {
               {formulas.map((f) => (
                 <li key={f.id}>
                   <Link
-                    href={`/${f.id}`}
+                    href={`/process/${f.id}`}
                     className="text-slate-700 hover:text-slate-900 font-semibold link-underline"
                   >
                     {f.name}

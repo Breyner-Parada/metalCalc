@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { rollingForce } from "@/formulas/deformation";
 import { NumberField } from "@/components/NumberField";
 import CalculatorCard from "@/components/Card";
+import BackButton from "@/components/BackButton";
 
 export default function Page() {
   const [h0, setH0] = useState(10);
@@ -31,45 +32,45 @@ export default function Page() {
   );
 
   return (
-    <div className="p-10 max-w-2xl mx-auto text-lg">
-      <CalculatorCard title="Deformación / Laminación">
+    <div className="px-4 py-6 sm:px-6 md:px-10 max-w-3xl mx-auto text-base sm:text-lg">
+      <BackButton />
+
+      <CalculatorCard title="Deformation / Rolling">
         <div className="mb-4 p-4 bg-slate-50 rounded text-base text-slate-700">
-          <p className="font-medium">Descripción</p>
+          <p className="font-medium">Description</p>
           <p className="mt-1">
-            La deformación por laminación es un proceso de conformado en el que
-            una pieza metálica se reduce en espesor al pasar entre rodillos.
-            Permite obtener espesores finales controlados y es común en procesos
-            de producción de chapa y lámina.
+            Rolling deformation is a forming process where a metal workpiece is
+            reduced in thickness by passing between rollers. It produces
+            controlled final thicknesses and is common for sheet and plate
+            production.
           </p>
 
-          <p className="font-medium mt-3">Variables (con unidades)</p>
+          <p className="font-medium mt-3">Variables (with units)</p>
           <ul className="list-disc pl-5 mt-1 text-base">
             <li>
-              <strong>h0</strong>: Espesor inicial (mm)
+              <strong>h0</strong>: Initial thickness (mm)
             </li>
             <li>
-              <strong>hf</strong>: Espesor final (mm)
+              <strong>hf</strong>: Final thickness (mm)
             </li>
             <li>
-              <strong>K</strong>: Coeficiente de resistencia / dureza (MPa)
+              <strong>K</strong>: Strength coefficient (MPa)
             </li>
             <li>
-              <strong>n</strong>: Exponente de endurecimiento por deformación
-              (adimensional)
+              <strong>n</strong>: Strain hardening exponent (dimensionless)
             </li>
             <li>
-              <strong>Área</strong>: Área de la sección (mm²)
+              <strong>Area</strong>: Cross-sectional area (mm²)
             </li>
           </ul>
 
           <p className="mt-2 text-sm text-slate-500">
-            Resultado: fuerza en Newtons (N). Asegúrese de usar unidades
-            consistentes al introducir valores.
+            Result: force in Newtons (N). Use consistent units.
           </p>
         </div>
 
         <div className="mb-4 p-4 bg-white/50 rounded text-base text-slate-700">
-          <p className="font-medium">Fórmulas</p>
+          <p className="font-medium">Formulas</p>
           <ul className="list-disc pl-5 mt-2 text-base">
             <li>
               <strong>Strain (ε)</strong>: ε = ln(h0 / hf)
@@ -85,7 +86,7 @@ export default function Page() {
           {result && (
             <div className="mt-2 text-base">
               <p>
-                <strong>Ejemplo numérico:</strong>
+                <strong>Numerical example:</strong>
               </p>
               <p>
                 ε = ln({h0} / {hf}) = {result.strain.toFixed(4)}
@@ -122,34 +123,28 @@ export default function Page() {
           onChange={(v) => v !== undefined && setN(v)}
         />
         <NumberField
-          label="Área"
+          label="Area"
           value={area}
           onChange={(v) => v !== undefined && setArea(v)}
         />
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded"
+          onClick={() => setResult(rollingForce(h0, hf, K, n, area))}
+        >
+          Calculate
+        </button>
 
-        <div className="mt-4">
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded"
-            onClick={() => setResult(rollingForce(h0, hf, K, n, area))}
-          >
-            Calcular
-          </button>
-        </div>
-
-        <div className="mt-4 space-y-2 text-base">
-          <p>
-            <strong>Strain:</strong> {result ? result.strain.toFixed(4) : "—"}{" "}
-            (adimensional)
-          </p>
-          <p>
-            <strong>Stress:</strong> {result ? result.stress.toFixed(2) : "—"}{" "}
-            MPa
-          </p>
-          <p>
-            <strong>Force:</strong>{" "}
-            {result ? result.force.toFixed(2) + " N" : "—"}
-          </p>
-        </div>
+        <p>
+          <strong>Strain:</strong> {result ? result.strain.toFixed(4) : "—"}{" "}
+          (dimensionless)
+        </p>
+        <p>
+          <strong>Stress:</strong> {result ? result.stress.toFixed(2) : "—"} MPa
+        </p>
+        <p>
+          <strong>Force:</strong>{" "}
+          {result ? result.force.toFixed(2) + " N" : "—"}
+        </p>
 
         {/* <LineChartBox data={data} xKey="reduction" yKey="force" /> */}
       </CalculatorCard>
